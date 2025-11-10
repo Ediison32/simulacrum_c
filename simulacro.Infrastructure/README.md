@@ -28,6 +28,16 @@
     - project              Indica dónde está tu AppDbContext y dónde se guardarán las migraciones.
     -startup-project       Indica desde dónde se ejecutará la configuración de EF (el Program.cs que tiene la conexión).
 
+# REFERENCIAS
+    dotnet add nombre.Application     reference nombre.Domain
+    dotnet add nombre.Infrastructure  reference nombre.Application
+    dotnet add nombre.Infrastructure  reference nombre.Domain
+    dotnet add nombre.Api             reference nombre.Application
+    dotnet add nombre.Api             reference nombre.Infrastructure
+
+
+# Swagger
+    dotnet add package Swashbuckle.AspNetCore
 
 # 1 crear proyecto
 # 2 modelos

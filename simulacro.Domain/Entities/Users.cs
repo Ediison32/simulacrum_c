@@ -6,6 +6,6 @@ public class Users : Person
 {
     public int Id { get; set; }
     
-    public DateAndTime DateCreate { get; set; }
+    public DateTime DateCreate { get; set; }
     
 }

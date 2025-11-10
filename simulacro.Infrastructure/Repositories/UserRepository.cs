@@ -41,31 +41,27 @@ public class UserRepository : IUserRepository
     {
         var userid = await _context.users.FindAsync(user.Id);
         if (userid != null) return null;
-
-        _context.users.AddAsync(userid);
+        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~eNTRO A CREAR ***************************");
+        _context.users.AddAsync(user);
         await _context.SaveChangesAsync();
         return userid;
 
     }
 
-    public async Task<Users> UpdateUserAsync(int id, Users user)
+    public async Task<Users> UpdateUserAsync(Users user)
     {
         try
         {
-            var userUpd = await _context.users.FindAsync(id);
-            if (userUpd == null) return null;
-
-
-            userUpd.Name = user.Name;
-            userUpd.LastName = user.LastName;
-            userUpd.DocNumber = user.DocNumber;
-            userUpd.Phone = user.Phone;
-            userUpd.Email = user.Email;
-            userUpd.UserName = user.UserName;
-            userUpd.Password = user.Password;
+            user.Name = user.Name;
+            user.LastName = user.LastName;
+            user.DocNumber = user.DocNumber;
+            user.Phone = user.Phone;
+            user.Email = user.Email;
+            user.UserName = user.UserName;
+            user.Password = user.Password;
 
             await _context.SaveChangesAsync();
-            return userUpd;
+            return user;
 
         }
         catch (HttpRequestException e)
@@ -75,7 +71,7 @@ public class UserRepository : IUserRepository
         }
     }
 
-    public async Task<Boolean> DeleteUserAsync(int id)
+    public async Task<bool> DeleteUserAsync(int id)
     {
         try
         {

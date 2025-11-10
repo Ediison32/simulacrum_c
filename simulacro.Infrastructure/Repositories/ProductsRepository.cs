@@ -75,6 +75,8 @@ public class ProductsRepository : IProductsRespository
             producid.Name = products.Name;
             producid.price = products.price;
             producid.Cuantity = products.Cuantity;
+            producid.topy = products.topy;
+            producid.UpdateProduct = products.UpdateProduct;
             await _context.SaveChangesAsync();
 
             return producid;

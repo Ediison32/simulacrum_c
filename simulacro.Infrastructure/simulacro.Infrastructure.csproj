@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\simulacro.Domain\simulacro.Domain.csproj" />
+    <ProjectReference Include="..\simulacro.Application\simulacro.Application.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,46 @@
+using simulacro.Application.Interfaces.Services;
+using simulacro.Application.Services;
+using simulacro.Domain.Interfaces;
+using simulacro.Infrastructure.Extensions;
+using simulacro.Infrastructure.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+// Database Dependency Injection:
+builder.Services.AddInfrastructure(builder.Configuration);
+
+// inyectar productos
+builder.Services.AddScoped<IProductsRespository, ProductsRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
+
+// inyectar usuarios
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUsersService, UserService>();
+
+
+// cors para hacer peticiones a desde cualquier parete 
+var corsPolicyName = "AllowAllOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(corsPolicyName, policy =>
+    {
+        policy
+            .AllowAnyHeader()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
+
+// contruccion de los controladores 
+
+builder.Services.AddControllers();
+
+// construccion de Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -9,33 +51,17 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+app.UseCors(corsPolicyName);
+
+
+app.MapControllers(); // para los controladores 
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
